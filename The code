@@ -1,0 +1,136 @@
+class CipherDecoderEncoder:  
+    def __init__(self):  
+        # Class variables initialized to None  
+        # These variables will store messages and the Morse code dictionary  
+        self.morse_code_dictionary = None  
+        self.message_to_encode = None  
+        self.message_to_decode = None  
+        self.encoded_message = None  
+        self.decoded_message = None  
+  
+    # Function to initialize the Morse code dictionary  
+    # This dictionary is used for both encoding and decoding messages  
+    def initialize_morse_code_dict(self):  
+        self.morse_code_dictionary = {  
+            'A': '.-', 'B': '-...', 'C': '-.-.', 'D': '-..', 'E': '.', 'F': '..-.',   
+            'G': '--.', 'H': '....', 'I': '..', 'J': '.---', 'K': '-.-', 'L': '.-..',   
+            'M': '--', 'N': '-.', 'O': '---', 'P': '.--.', 'Q': '--.-', 'R': '.-.',   
+            'S': '...', 'T': '-', 'U': '..-', 'V': '...-', 'W': '.--', 'X': '-..-',   
+            'Y': '-.--', 'Z': '--..', '1': '.----', '2': '..---', '3': '...--',   
+            '4': '....-', '5': '.....', '6': '-....', '7': '--...', '8': '---..',   
+            '9': '----.', '0': '-----', ',': '--..--', '.': '.-.-.-', '?': '..--..',   
+            '/': '-..-.', '-': '-....-', '(': '-.--.', ')': '-.--.-'  
+        }  
+  
+    # Function to get the message to encode from the user  
+    # This message will be transformed into Morse code  
+    def get_message_to_encode(self):  
+        self.message_to_encode = input("Enter the message to encode using Morse code: ")  
+  
+    # Function to encrypt (encode) the input message into Morse code  
+    def encrypt(self):  
+        # Convert the message to uppercase so that it matches the dictionary keys  
+        message = self.message_to_encode.upper()  
+        cipher = ''  
+          
+        # Loop through each character in the message  
+        for letter in message:  
+            if letter != ' ':  
+                # If the character is not a space, convert it to Morse code  
+                cipher += self.morse_code_dictionary.get(letter, '') + ' '  
+            else:  
+                # A space indicates the separation of words  
+                cipher += ' '  # Separate words by a double space  
+          
+        # Store the encoded message  
+        self.encoded_message = cipher  
+  
+    # Function to print the encoded message  
+    def print_encoded_message(self):  
+        print("Encoded message is:", self.encoded_message)  
+  
+    # Function to get the Morse code message to decode from the user  
+    def get_message_to_decode(self):  
+        self.message_to_decode = input("Enter the Morse code to decode: ")  
+  
+    # Function to decrypt (decode) the Morse code into a regular message  
+    def decrypt(self):  
+        # Add an extra space at the end of the message to access the last Morse code  
+        message = self.message_to_decode.strip() + ' '  
+        decipher = ''  
+        citext = ''  
+        i = 0  # Initialize space counter  
+  
+        # Loop through each character in the Morse code message  
+        for letter in message:  
+            if letter != ' ':  
+                # If the character is not a space, it's part of a Morse code symbol  
+                i = 0  
+                citext += letter  # Build the Morse code symbol  
+            else:  
+                # If there is a space, check if it's a word or letter separator  
+                i += 1  
+                if i == 2:  
+                    # Two spaces mean a word separator  
+                    decipher += ' '  
+                else:  
+                    # Single space means the end of a letter, decode it  
+                    decipher += list(self.morse_code_dictionary.keys())[  
+                        list(self.morse_code_dictionary.values()).index(citext)]  
+                    citext = ''  # Reset citext for the next letter  
+  
+        # Store the decoded message  
+        self.decoded_message = decipher  
+  
+    # Function to print the decoded message  
+    def print_decoded_message(self):  
+        print("Decoded message is:", self.decoded_message)  
+  
+# Main function to run the program and provide the user with a menu of options  
+def main():  
+    morse_handler = CipherDecoderEncoder()  
+      
+    while True:  
+        # Display menu options to the user  
+        print("Select an option:")  
+        print("0. Initialize the Morse code dictionary.")  
+        print("1. Enter a string to encode.")  
+        print("2. Encode the string.")  
+        print("3. Print the encoded string.")  
+        print("4. Enter a Morse code string to decode.")  
+        print("5. Decode the string.")  
+        print("6. Print the decoded string.")  
+        print("7. Exit.")  
+  
+        # Get the user's choice  
+        menu_choice = int(input())  
+  
+        # Perform the corresponding operation based on the user's choice  
+        if menu_choice == 0:  
+            morse_handler.initialize_morse_code_dict()  
+        elif menu_choice == 1:  
+            morse_handler.get_message_to_encode()  
+        elif menu_choice == 2:  
+            morse_handler.encrypt()  
+            print("String encoded successfully.")  
+        elif menu_choice == 3:  
+            morse_handler.print_encoded_message()  
+        elif menu_choice == 4:  
+            morse_handler.get_message_to_decode()  
+        elif menu_choice == 5:  
+            morse_handler.decrypt()  
+            print("String decoded successfully.")  
+        elif menu_choice == 6:  
+            morse_handler.print_decoded_message()  
+        elif menu_choice == 7:  
+            break  # Exit the loop to terminate the program  
+  
+        # Ask the user whether to continue or exit  
+        continue_or_exit = input("Enter 'y' to continue or 'n' to exit: ")  
+        if continue_or_exit.lower() == 'n':  
+            break  # Exit the loop if the user chooses 'n'  
+  
+# Entry point of the program  
+if __name__ == "__main__":  
+    main()  
+
